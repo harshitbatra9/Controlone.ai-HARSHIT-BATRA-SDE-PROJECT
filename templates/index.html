@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Streaming</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+
+        .video-feed {
+            border: 1px solid #ccc;
+            width: 45%;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .button {
+            background-color: blue;
+
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Streaming</h1>
+    
+    <div class="video-container">
+        <img class="video-feed" id="video_feed1">
+        <img class="video-feed" id="video_feed2">
+    </div>
+    <button class="button" onclick="startVideo()">Start Video Streams</button>
+
+    <button class="button" onclick="stopVideo()">Stop Video Streams</button>
+
+    <script>
+        let streaming = false;
+
+        function startVideo() {
+            if (!streaming) {
+                fetch('/start', { method: 'POST' })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                        document.getElementById('video_feed1').src = '/video_stream1';
+                        document.getElementById('video_feed2').src = '/video_stream2';
+                        streaming = true;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+
+        function stopVideo() {
+            if (streaming) {
+                fetch('/stop', { method: 'POST' })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                        document.getElementById('video_feed1').src = '';
+                        document.getElementById('video_feed2').src = '';
+                        streaming = false;
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+</body>
+</html>
